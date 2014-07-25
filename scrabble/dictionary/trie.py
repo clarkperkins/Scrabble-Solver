@@ -44,14 +44,12 @@ class TrieNode(object):
             else:
                 return False
 
-    def print_words(self, prefix):
+    def print_words(self, prefix, delimiter):
         ret = ''
-        if prefix == ' ':
-            prefix = ''
         if self.end:
-            ret += '{0}{1}\n'.format(prefix, self.char)
+            ret += '{0}{1}{2}'.format(prefix, self.char, delimiter)
         for subtree in self.subtree.values():
-            ret += subtree.print_words(prefix+self.char)
+            ret += subtree.print_words(prefix+self.char, delimiter)
         return ret
 
     def word_count(self):
@@ -63,21 +61,21 @@ class TrieNode(object):
         return count
 
     def __str__(self):
-        return '{0} {1} {2}'.format(self.char, self.end, self.subtree)
+        return '{0} {1} {2}'.format(self.char, self.end, self.subtree.keys())
 
 
 class Trie(object):
 
     def __init__(self):
-        self.root = TrieNode(' ', False)
+        self.root = TrieNode('', False)
 
     def insert(self, word):
-        self.root.insert(word)
+        self.root.insert(word.lower())
 
     def load_from_file(self, filename):
         with open(filename, 'r') as f:
             for line in f:
-                self.root.insert(line.strip().lower())
+                self.insert(line.strip())
 
     def is_word(self, word):
         return self.root.is_word(word)
@@ -88,5 +86,12 @@ class Trie(object):
     def word_count(self):
         return self.root.word_count()
 
+    def get_words(self, delimiter='\n', remove_last=True):
+        ret = self.root.print_words('', delimiter)
+        return ret[:-len(delimiter)] if remove_last else ret
+
+    def print_words(self, delimiter='\n'):
+        print self.get_words(delimiter)
+
     def __str__(self):
-        return self.root.print_words('')[:-1]
+        return self.get_words()
