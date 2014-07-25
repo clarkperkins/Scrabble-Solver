@@ -1,0 +1,8 @@
+a
+zoo
+hello
+hell
+vim
+dog
+cat
+ostrich

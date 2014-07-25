@@ -60,8 +60,14 @@ class TrieNode(object):
             count += subtree.word_count()
         return count
 
-    def __str__(self):
-        return '{0} {1} {2}'.format(self.char, self.end, self.subtree.keys())
+    def __repr__(self, level=0):
+        ret = '{0}{1} {2}\n'.format('  '*level, repr(self.char), repr(self.end))
+        for child in self.subtree:
+            ret += child.__repr__(level+1)
+        return ret
+
+    # def __str__(self):
+    #     return '{0} {1} {2}'.format(self.char, self.end, self.subtree.keys())
 
 
 class Trie(object):
@@ -93,5 +99,5 @@ class Trie(object):
     def print_words(self, delimiter='\n'):
         print self.get_words(delimiter)
 
-    def __str__(self):
-        return self.get_words()
+    def __repr__(self):
+        return repr(self.root)
