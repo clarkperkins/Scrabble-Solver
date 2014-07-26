@@ -1,12 +1,4 @@
 
-END_CHAR = 'z'
-
-
-# increment a letter
-def incr_let(let):
-    return chr(ord(let)+1)
-
-
 class TrieNode(object):
     """
     A node within the tree structure.  Not meant to be used on its own
@@ -54,7 +46,7 @@ class TrieNode(object):
 
     def get_words(self, prefix):
         """
-        Get a list of words in the Trie
+        Get a list of words in the sub-Trie
         """
         ret = []
         if self._end:
@@ -114,7 +106,7 @@ class TrieNode(object):
 
 class Trie(object):
     """
-    An efficient data structure used for storing a dictionary of words
+    An efficient data structure used for storing a large dictionary of words
     """
 
     def __init__(self, root=None):
