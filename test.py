@@ -6,5 +6,5 @@ t = Trie()
 
 t.load_from_file('test.txt')
 
-print \
-    t
+for i in t:
+    print i

@@ -44,12 +44,12 @@ class TrieNode(object):
             else:
                 return False
 
-    def get_words(self, prefix, delimiter='\n'):
-        ret = ''
+    def get_words(self, prefix):
+        ret = []
         if self._end:
-            ret += '{0}{1}{2}'.format(prefix, self._char, delimiter)
+            ret.append('{0}{1}'.format(str(prefix), str(self._char)))
         for let in sorted(self._subtree):
-            ret += self._subtree[let].get_words(prefix+self._char, delimiter)
+            ret.extend(self._subtree[let].get_words(prefix+self._char))
         return ret
 
     def word_count(self):
@@ -89,7 +89,7 @@ class TrieNode(object):
 
 class Trie(object):
     """
-    A data structure used for storing a dictionary of words
+    An efficient data structure used for storing a dictionary of words
     """
 
     def __init__(self, root=None):
@@ -110,21 +110,19 @@ class Trie(object):
         for word in words:
             self.insert(word)
 
-    def is_word(self, word):
+    def __contains__(self, word):
+        print '__contains__ called'
         return self._root.is_word(word)
 
     def is_prefix(self, prefix):
         return self._root.is_prefix(prefix)
 
-    def word_count(self):
+    def __len__(self):
         return self._root.word_count()
 
-    def get_words(self, delimiter='\n', remove_last=True):
-        ret = self._root.get_words('', delimiter)
-        return ret[:-len(delimiter)] if remove_last else ret
-
-    def print_words(self, delimiter='\n'):
-        print self.get_words(delimiter)
+    def __iter__(self):
+        print '__iter__ called'
+        return iter(self._root.get_words(''))
 
     def __eq__(self, other):
         return isinstance(other, Trie) and self._root == other.root
@@ -136,4 +134,4 @@ class Trie(object):
         return 'Trie({0})'.format(repr(self._root))
 
     def __str__(self):
-        return self.get_words()
+        return '\n'.join(self._root.get_words(''))
