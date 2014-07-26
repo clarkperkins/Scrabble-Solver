@@ -1,4 +1,12 @@
 
+END_CHAR = 'z'
+
+
+# increment a letter
+def incr_let(let):
+    return chr(ord(let)+1)
+
+
 class TrieNode(object):
     """
     A node within the tree structure.  Not meant to be used on its own
@@ -45,12 +53,29 @@ class TrieNode(object):
                 return False
 
     def get_words(self, prefix):
+        """
+        Get a list of words in the Trie
+        """
         ret = []
         if self._end:
             ret.append('{0}{1}'.format(str(prefix), str(self._char)))
         for let in sorted(self._subtree):
             ret.extend(self._subtree[let].get_words(prefix+self._char))
         return ret
+
+    def generator(self, prefix):
+        """
+        Generator for loops - used in Trie
+        t = Trie()
+        ...
+        for word in t:
+            do something
+        """
+        if self._end:
+            yield '{0}{1}'.format(str(prefix), str(self._char))
+        for let in sorted(self._subtree):
+            for word in self._subtree[let].generator(prefix+self._char):
+                yield word
 
     def word_count(self):
         count = 0
@@ -111,7 +136,6 @@ class Trie(object):
             self.insert(word)
 
     def __contains__(self, word):
-        print '__contains__ called'
         return self._root.is_word(word)
 
     def is_prefix(self, prefix):
@@ -121,8 +145,7 @@ class Trie(object):
         return self._root.word_count()
 
     def __iter__(self):
-        print '__iter__ called'
-        return iter(self._root.get_words(''))
+        return self._root.generator('')
 
     def __eq__(self, other):
         return isinstance(other, Trie) and self._root == other.root
@@ -133,5 +156,8 @@ class Trie(object):
     def __repr__(self):
         return 'Trie({0})'.format(repr(self._root))
 
+    def get_str(self, delimiter='\n'):
+        return delimiter.join(self._root.get_words(''))
+
     def __str__(self):
-        return '\n'.join(self._root.get_words(''))
+        return self.get_str()
