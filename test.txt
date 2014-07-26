@@ -1,5 +1,12 @@
 a
+act
 zoo
+zookeeper
+hbase
+hadoop
+hive
+pig
+yarn
 hello
 hell
 vim

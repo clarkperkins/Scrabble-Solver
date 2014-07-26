@@ -1,17 +1,20 @@
 
 class TrieNode(object):
 
-    def __init__(self, char, end):
-        assert isinstance(char, str)
+    def __init__(self, char, end, subtree=None):
+        assert isinstance(char, basestring)
         assert isinstance(end, bool)
 
         self.char = char
         self.end = end
         # Subtree of TrieNodes
-        self.subtree = {}
+        if isinstance(subtree, dict):
+            self.subtree = subtree
+        else:
+            self.subtree = {}
 
     def insert(self, word):
-        assert isinstance(word, str)
+        assert isinstance(word, basestring)
 
         if len(word) == 0:
             self.end = True
@@ -21,7 +24,7 @@ class TrieNode(object):
             next_node.insert(word[1:])
 
     def is_word(self, word):
-        assert isinstance(word, str)
+        assert isinstance(word, basestring)
 
         if len(word) == 0:
             return self.end
@@ -44,12 +47,12 @@ class TrieNode(object):
             else:
                 return False
 
-    def print_words(self, prefix, delimiter):
+    def get_words(self, prefix, delimiter='\n'):
         ret = ''
         if self.end:
             ret += '{0}{1}{2}'.format(prefix, self.char, delimiter)
-        for subtree in self.subtree.values():
-            ret += subtree.print_words(prefix+self.char, delimiter)
+        for let in sorted(self.subtree):
+            ret += self.subtree[let].get_words(prefix+self.char, delimiter)
         return ret
 
     def word_count(self):
@@ -60,28 +63,52 @@ class TrieNode(object):
             count += subtree.word_count()
         return count
 
-    def __repr__(self, level=0):
-        ret = '{0}{1} {2}\n'.format('  '*level, repr(self.char), repr(self.end))
-        for child in self.subtree:
-            ret += child.__repr__(level+1)
-        return ret
+    def __eq__(self, other):
+        if not isinstance(other, TrieNode):
+            return False
+        if self.char != other.char:
+            return False
+        if self.end != other.end:
+            return False
+        if set(self.subtree) != set(other.subtree):
+            return False
+        for let in self.subtree:
+            if not (self.subtree[let] == other.subtree[let]):
+                return False
+        return True
 
-    # def __str__(self):
-    #     return '{0} {1} {2}'.format(self.char, self.end, self.subtree.keys())
+    def __ne__(self, other):
+        return not (self == other)
+
+    def __repr__(self):
+        return 'TrieNode({0}, {1}, {2})'.format(
+            repr(self.char),
+            repr(self.end),
+            repr(self.subtree))
+
+    def __str__(self):
+        return self.get_words('')
 
 
 class Trie(object):
 
-    def __init__(self):
-        self.root = TrieNode('', False)
+    def __init__(self, root=None):
+        if isinstance(root, TrieNode):
+            self.root = root
+        else:
+            self.root = TrieNode('', False)
 
     def insert(self, word):
         self.root.insert(word.lower())
 
     def load_from_file(self, filename):
         with open(filename, 'r') as f:
-            for line in f:
-                self.insert(line.strip())
+            for word in f:
+                self.insert(word.strip())
+
+    def load_words(self, words):
+        for word in words:
+            self.insert(word)
 
     def is_word(self, word):
         return self.root.is_word(word)
@@ -92,12 +119,21 @@ class Trie(object):
     def word_count(self):
         return self.root.word_count()
 
-    def get_words(self, delimiter='\n', remove_last=True):
-        ret = self.root.print_words('', delimiter)
+    def get_words(self, delimiter='\n', remove_last=True, sort_length=False):
+        ret = self.root.get_words('', delimiter)
         return ret[:-len(delimiter)] if remove_last else ret
 
     def print_words(self, delimiter='\n'):
         print self.get_words(delimiter)
 
+    def __eq__(self, other):
+        return isinstance(other, Trie) and self.root == other.root
+
+    def __ne__(self, other):
+        return not (self == other)
+
     def __repr__(self):
-        return repr(self.root)
+        return 'Trie({0})'.format(repr(self.root))
+
+    def __str__(self):
+        return self.get_words()
