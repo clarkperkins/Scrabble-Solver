@@ -116,14 +116,29 @@ class Trie(object):
             self._root = TrieNode('', False)
 
     def insert(self, word):
+        """
+
+        :param word:
+        :return:
+        """
         self._root.insert(word.lower())
 
     def load_from_file(self, filename):
+        """
+
+        :param filename:
+        :return:
+        """
         with open(filename, 'r') as f:
             for word in f:
                 self.insert(word.strip())
 
     def load_words(self, words):
+        """
+
+        :param words:
+        :return:
+        """
         for word in words:
             self.insert(word)
 
@@ -131,6 +146,12 @@ class Trie(object):
         return self._root.is_word(word)
 
     def is_prefix(self, prefix):
+        """
+
+        :param prefix:
+        :return:
+        :rtype: bool
+        """
         return self._root.is_prefix(prefix)
 
     def __len__(self):
@@ -149,6 +170,12 @@ class Trie(object):
         return 'Trie({0})'.format(repr(self._root))
 
     def get_str(self, delimiter='\n'):
+        """
+
+        :param delimiter:
+        :return:
+        :rtype: type(delimiter)
+        """
         return delimiter.join(self._root.get_words(''))
 
     def __str__(self):
