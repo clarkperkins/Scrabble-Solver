@@ -23,11 +23,11 @@ class Solver(object):
         print('Done!')
 
         self._min_len = min_len
-        self._tmp_trie = None
+        self._tmp_wordlist = None
 
     def _solve_help(self, remaining, pre):
         if len(pre) >= self._min_len and pre in self._dict:
-            self._tmp_trie.insert(pre)
+            self._tmp_wordlist.insert(pre)
 
         if not self._dict.is_prefix(pre):
             return
@@ -45,12 +45,12 @@ class Solver(object):
         print('Solving...'),
         sys.stdout.flush()
         start = datetime.now()
-        # Create a new trie
-        self._tmp_trie = WordList()
+        # Create a new wordlist
+        self._tmp_wordlist = WordList()
         self._solve_help(string, '')
         diff = datetime.now() - start
 
-        num_words = len(self._tmp_trie)
+        num_words = len(self._tmp_wordlist)
         print('Done!')
         print('Found {0} word{1} in {2} seconds.'.format(
             num_words,
@@ -59,8 +59,8 @@ class Solver(object):
         ))
 
         # Don't hold on to the reference
-        tmp = self._tmp_trie
-        self._tmp_trie = None
+        tmp = self._tmp_wordlist
+        self._tmp_wordlist = None
         return tmp
 
     def running(self):
@@ -69,4 +69,4 @@ class Solver(object):
         :return:
         :rtype: bool
         """
-        return self._tmp_trie is not None
+        return self._tmp_wordlist is not None
