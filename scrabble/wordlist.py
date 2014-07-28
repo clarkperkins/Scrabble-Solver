@@ -106,7 +106,7 @@ class WordListNode(object):
 
 class WordList(object):
     """
-    An efficient data structure used for storing a large dictionary of words
+    An efficient data structure used for storing a large list of words
     """
 
     def __init__(self, root=None):

@@ -1,5 +1,7 @@
-from .wordlist import WordList
 from datetime import datetime
+import sys
+
+from .wordlist import WordList
 
 
 class Solver(object):
@@ -15,7 +17,11 @@ class Solver(object):
 
     def __init__(self, min_len=DEFAULT_MIN_LEN, dict_file='scrabble/dictionaries/ospd.txt'):
         self._dict = WordList()
+        print 'Loading legal word list...',
+        sys.stdout.flush()
         self._dict.load_from_file(dict_file)
+        print 'Done!'
+
         self._min_len = min_len
         self._tmp_trie = None
 
