@@ -17,10 +17,10 @@ class Solver(object):
 
     def __init__(self, min_len=DEFAULT_MIN_LEN, dict_file='scrabble/dictionaries/ospd.txt'):
         self._dict = WordList()
-        print 'Loading legal word list...',
+        print('Loading legal word list...'),
         sys.stdout.flush()
         self._dict.load_from_file(dict_file)
-        print 'Done!'
+        print('Done!')
 
         self._min_len = min_len
         self._tmp_trie = None
@@ -42,7 +42,8 @@ class Solver(object):
         :return: A WordList containing the found words
         :rtype: WordList
         """
-        print('Solving...')
+        print('Solving...'),
+        sys.stdout.flush()
         start = datetime.now()
         # Create a new trie
         self._tmp_trie = WordList()
@@ -50,7 +51,8 @@ class Solver(object):
         diff = datetime.now() - start
 
         num_words = len(self._tmp_trie)
-        print('Done!  Found {0} word{1} in {2} seconds'.format(
+        print('Done!')
+        print('Found {0} word{1} in {2} seconds.'.format(
             num_words,
             '' if num_words == 1 else 's',
             diff.seconds
