@@ -2,9 +2,9 @@
 from scrabble.scrabble import Solver
 
 
-s = Solver(min_len=6)
+s = Solver(min_len=3)
 
-t = s.solve('smagbet')
+t = s.solve('bknuybz')
 
 
 print(t.get_str(', '))

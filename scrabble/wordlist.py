@@ -1,5 +1,5 @@
 
-class TrieNode(object):
+class WordListNode(object):
     """
     A node within the tree structure.  Not meant to be used on its own
     """
@@ -21,7 +21,7 @@ class TrieNode(object):
             self._end = True
             return
         else:
-            next_node = self._subtree.setdefault(word[0], TrieNode(word[0], False))
+            next_node = self._subtree.setdefault(word[0], WordListNode(word[0], False))
             next_node.insert(word[1:])
 
     def is_word(self, word):
@@ -78,7 +78,7 @@ class TrieNode(object):
         return count
 
     def __eq__(self, other):
-        if not isinstance(other, TrieNode):
+        if not isinstance(other, WordListNode):
             return False
         if self._char != other._char:
             return False
@@ -104,16 +104,16 @@ class TrieNode(object):
         return self.get_words('')
 
 
-class Trie(object):
+class WordList(object):
     """
     An efficient data structure used for storing a large dictionary of words
     """
 
     def __init__(self, root=None):
-        if isinstance(root, TrieNode):
+        if isinstance(root, WordListNode):
             self._root = root
         else:
-            self._root = TrieNode('', False)
+            self._root = WordListNode('', False)
 
     def insert(self, word):
         """
@@ -161,7 +161,7 @@ class Trie(object):
         return self._root.generator('')
 
     def __eq__(self, other):
-        return isinstance(other, Trie) and self._root == other.root
+        return isinstance(other, WordList) and self._root == other.root
 
     def __ne__(self, other):
         return not (self == other)

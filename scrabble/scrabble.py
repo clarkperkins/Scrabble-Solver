@@ -1,5 +1,5 @@
 from .trie import Trie
-from datetime import datetime, timedelta
+from datetime import datetime
 
 
 class Solver(object):
