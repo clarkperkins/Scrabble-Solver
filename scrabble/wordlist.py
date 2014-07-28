@@ -61,7 +61,7 @@ class WordListNode(object):
         t = WordList()
         ...
         for word in t:
-            do something
+            # do something
         """
         if self._end:
             yield '{0}{1}'.format(str(prefix), str(self._char))
@@ -119,7 +119,6 @@ class WordList(object):
         """
 
         :param word:
-        :return:
         """
         self._root.insert(word.lower())
 
@@ -127,7 +126,6 @@ class WordList(object):
         """
 
         :param filename:
-        :return:
         """
         with open(filename, 'r') as f:
             for word in f:
@@ -137,7 +135,6 @@ class WordList(object):
         """
 
         :param words:
-        :return:
         """
         for word in words:
             self.insert(word)
@@ -149,7 +146,7 @@ class WordList(object):
         """
 
         :param prefix:
-        :return:
+        :return: Whether or not the given prefix exists in the wordlist
         :rtype: bool
         """
         return self._root.is_prefix(prefix)
