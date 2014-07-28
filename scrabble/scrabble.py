@@ -39,8 +39,8 @@ class Solver(object):
         """
 
         :param string: the cluster of letters to scramble
-        :return: A Trie containing the found words
-        :rtype: Trie
+        :return: A WordList containing the found words
+        :rtype: WordList
         """
         print('Solving...')
         start = datetime.now()

@@ -10,7 +10,7 @@ class WordListNode(object):
 
         self._char = char
         self._end = end
-        # Subtree of TrieNodes
+        # Subtree of WordListNodes
         if isinstance(subtree, dict):
             self._subtree = subtree
         else:
@@ -46,7 +46,7 @@ class WordListNode(object):
 
     def get_words(self, prefix):
         """
-        Get a list of words in the sub-Trie
+        Get a list of words in the sub-WordList
         """
         ret = []
         if self._end:
@@ -57,8 +57,8 @@ class WordListNode(object):
 
     def generator(self, prefix):
         """
-        Generator for loops - used in Trie
-        t = Trie()
+        Generator for loops - used in WordList
+        t = WordList()
         ...
         for word in t:
             do something
@@ -95,7 +95,7 @@ class WordListNode(object):
         return not (self == other)
 
     def __repr__(self):
-        return 'TrieNode({0}, {1}, {2})'.format(
+        return 'WordListNode({0}, {1}, {2})'.format(
             repr(self._char),
             repr(self._end),
             repr(self._subtree))
@@ -167,7 +167,7 @@ class WordList(object):
         return not (self == other)
 
     def __repr__(self):
-        return 'Trie({0})'.format(repr(self._root))
+        return 'WordList({0})'.format(repr(self._root))
 
     def get_str(self, delimiter='\n'):
         """
