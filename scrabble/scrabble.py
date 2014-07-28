@@ -1,4 +1,4 @@
-from .trie import Trie
+from .wordlist import WordList
 from datetime import datetime
 
 
@@ -14,7 +14,7 @@ class Solver(object):
     )
 
     def __init__(self, min_len=DEFAULT_MIN_LEN, dict_file='scrabble/dictionaries/ospd.txt'):
-        self._dict = Trie()
+        self._dict = WordList()
         self._dict.load_from_file(dict_file)
         self._min_len = min_len
         self._tmp_trie = None
@@ -39,7 +39,7 @@ class Solver(object):
         print('Solving...')
         start = datetime.now()
         # Create a new trie
-        self._tmp_trie = Trie()
+        self._tmp_trie = WordList()
         self._solve_help(string, '')
         diff = datetime.now() - start
 
