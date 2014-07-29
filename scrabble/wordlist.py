@@ -5,7 +5,7 @@ class WordListNode(object):
     """
 
     def __init__(self, char, end, subtree=None):
-        assert isinstance(char, basestring)
+        assert isinstance(char, str)
         assert isinstance(end, bool)
 
         self._char = char

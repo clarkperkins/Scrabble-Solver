@@ -8,7 +8,7 @@ class Solver(object):
     """
 
     """
-    DEFAULT_MIN_LEN = 3
+    DEFAULT_MIN_LEN = 2
 
     letter_mapping = dict(
         a=1, b=4, c=4, d=2, e=1, f=4, g=3, h=3, i=1, j=10, k=5, l=2, m=4,
@@ -17,10 +17,10 @@ class Solver(object):
 
     def __init__(self, min_len=DEFAULT_MIN_LEN, dict_file='scrabble/dictionaries/ospd.txt'):
         self._dict = WordList()
-        print('Loading legal word list...'),
+        print 'Loading legal word list...',
         sys.stdout.flush()
         self._dict.load_from_file(dict_file)
-        print('Done!')
+        print 'Done!'
 
         self._min_len = min_len
         self._tmp_wordlist = None
@@ -33,7 +33,12 @@ class Solver(object):
             return
 
         for let in remaining:
-            self._solve_help(remaining.replace(let, '', 1), pre+let)
+            if let == '?':
+                r = remaining.replace(let, '', 1)
+                for sublet in range(ord('a'), ord('z')+1):
+                    self._solve_help(r, pre+chr(sublet))
+            else:
+                self._solve_help(remaining.replace(let, '', 1), pre+let)
 
     def solve(self, string):
         """
@@ -42,7 +47,7 @@ class Solver(object):
         :return: A WordList containing the found words
         :rtype: WordList
         """
-        print('Solving...'),
+        print 'Solving...',
         sys.stdout.flush()
         start = datetime.now()
         # Create a new wordlist
@@ -51,12 +56,12 @@ class Solver(object):
         diff = datetime.now() - start
 
         num_words = len(self._tmp_wordlist)
-        print('Done!')
-        print('Found {0} word{1} in {2} seconds.'.format(
+        print 'Done!'
+        print 'Found {0} word{1} in {2} seconds.'.format(
             num_words,
             '' if num_words == 1 else 's',
-            diff.seconds
-        ))
+            diff.microseconds * (10 ** -6)
+        )
 
         # Don't hold on to the reference
         tmp = self._tmp_wordlist
