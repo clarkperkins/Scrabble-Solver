@@ -35,8 +35,8 @@ class Solver(object):
         for let in remaining:
             if let == '?':
                 r = remaining.replace(let, '', 1)
-                for sublet in range(ord('a'), ord('z')+1):
-                    self._solve_help(r, pre+chr(sublet))
+                for sublet in self.letter_mapping:
+                    self._solve_help(r, pre+sublet)
             else:
                 self._solve_help(remaining.replace(let, '', 1), pre+let)
 
@@ -52,7 +52,7 @@ class Solver(object):
         start = datetime.now()
         # Create a new wordlist
         self._tmp_wordlist = WordList()
-        self._solve_help(string, '')
+        self._solve_help(string.lower(), '')
         diff = datetime.now() - start
 
         num_words = len(self._tmp_wordlist)
@@ -68,10 +68,54 @@ class Solver(object):
         self._tmp_wordlist = None
         return tmp
 
-    def running(self):
+    def _match_help(self, remaining, pre):
+        if len(remaining) == 0:
+            if pre in self._dict:
+                self._tmp_wordlist.insert(pre)
+            return
+
+        if not self._dict.is_prefix(pre):
+            return
+
+        if remaining[0] == '?':
+            for sublet in self.letter_mapping:
+                if len(remaining) <= 1:
+                    self._match_help('', pre+sublet)
+                else:
+                    self._match_help(remaining[1:], pre+sublet)
+        else:
+            if len(remaining) <= 1:
+                self._match_help('', pre+remaining[0])
+            else:
+                self._match_help(remaining[1:], pre+remaining[0])
+
+    def match(self, match_str):
         """
 
-        :return:
-        :rtype: bool
+        :param match_str:
+        :return: A WordList containing matching words
+        :rtype: WordList
         """
-        return self._tmp_wordlist is not None
+        print 'Matching...',
+        sys.stdout.flush()
+        start = datetime.now()
+
+        self._tmp_wordlist = WordList()
+        self._match_help(match_str, '')
+
+        diff = datetime.now() - start
+
+        num_words = len(self._tmp_wordlist)
+        print 'Done!'
+        print 'Matched {0} word{1} in {2} seconds.'.format(
+            num_words,
+            '' if num_words == 1 else 's',
+            diff.microseconds * (10 ** -6)
+        )
+
+        # Don't hold on to the reference
+        tmp = self._tmp_wordlist
+        self._tmp_wordlist = None
+        return tmp
+
+
