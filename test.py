@@ -3,29 +3,34 @@ import sys
 
 from scrabble.scrabble import Solver
 
-if __name__ == '__main__':
+
+def main():
     try:
         s = Solver()
 
-        letters = raw_input('Enter your letters: ')
-
-        wl = s.solve(letters)
-
-        sorter = {}
-
-        for word in wl:
-            sorter.setdefault(len(word), []).append(word)
-
         print
 
-        for length, words in sorted(sorter.items()):
-            print '{0} letter words ({1}):'.format(length, len(words))
-            print ', '.join(sorted(words))
+        will_continue = 'y'
+
+        while will_continue in ['y', 'Y']:
+            letters = raw_input('Enter your letters: ')
+
+            wl = s.solve(letters)
+
             print
+
+            print wl.sorted_words()
+
+            will_continue = raw_input('Would you like to try again? (Y|N) ')
 
     except KeyboardInterrupt:
         sys.stdout.flush()
         print 'exiting...'
+
+
+if __name__ == '__main__':
+    main()
+
 
 
 

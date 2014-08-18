@@ -166,7 +166,7 @@ class WordList(object):
     def __repr__(self):
         return 'WordList({0})'.format(repr(self._root))
 
-    def get_str(self, delimiter='\n'):
+    def string(self, delimiter='\n'):
         """
 
         :param delimiter:
@@ -176,4 +176,18 @@ class WordList(object):
         return delimiter.join(self._root.get_words(''))
 
     def __str__(self):
-        return self.get_str()
+        return self.string()
+
+    def sorted_words(self):
+        sorter = {}
+        for word in self:
+            sorter.setdefault(len(word), []).append(word)
+
+        ret = ''
+
+        for length, words in reversed(sorted(sorter.items())):
+            ret += '{0} letter words ({1}):\n'.format(length, len(words))
+            ret += '{0}\n'.format(', '.join(sorted(words)))
+            ret += '\n'
+
+        return ret
