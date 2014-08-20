@@ -19,14 +19,15 @@ class Solver(object):
     def __init__(self, min_len=DEFAULT_MIN_LEN,
                  dict_file=os.path.join(sys.prefix, 'dictionaries', 'ospd.dict')):
 
-        self._dict = WordList()
+        self._full_dict = WordList()
         print 'Loading legal word list...',
         sys.stdout.flush()
-        self._dict.load_from_file(dict_file)
+        self._full_dict.load_from_file(dict_file)
         print 'Done!'
 
         self._min_len = min_len
         self._tmp_wordlist = None
+        self._dict = None
 
     def _solve_help(self, remaining, pre):
         if len(pre) >= self._min_len and pre in self._dict:
@@ -43,18 +44,22 @@ class Solver(object):
             else:
                 self._solve_help(remaining.replace(let, '', 1), pre+let)
 
-    def solve(self, string):
+    def solve(self, string, wordlist=None):
         """
 
         :param string: the cluster of letters to scramble
         :return: A WordList containing the found words
         :rtype: WordList
         """
+        if not isinstance(wordlist, WordList):
+            wordlist = self._full_dict
+
         print 'Solving...',
         sys.stdout.flush()
         start = datetime.now()
         # Create a new wordlist
         self._tmp_wordlist = WordList()
+        self._dict = wordlist
         self._solve_help(string.lower(), '')
         diff = datetime.now() - start
 
@@ -92,18 +97,22 @@ class Solver(object):
             else:
                 self._match_help(remaining[1:], pre+remaining[0])
 
-    def match(self, match_str):
+    def match(self, match_str, wordlist=None):
         """
 
         :param match_str:
         :return: A WordList containing matching words
         :rtype: WordList
         """
+        if not isinstance(wordlist, WordList):
+            wordlist = self._full_dict
+
         print 'Matching...',
         sys.stdout.flush()
         start = datetime.now()
 
         self._tmp_wordlist = WordList()
+        self._dict = wordlist
         self._match_help(match_str, '')
 
         diff = datetime.now() - start
