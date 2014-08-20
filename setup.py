@@ -55,6 +55,7 @@ setup(
         'scrabble.cli': [
             'solve = scrabble.cli.solve:Solve',
             'match = scrabble.cli.match:Match',
+            'solve-match = scrabble.cli.match:SolveMatch',
         ],
     },
 

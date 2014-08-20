@@ -107,13 +107,15 @@ class Solver(object):
         if not isinstance(wordlist, WordList):
             wordlist = self._full_dict
 
+        new_str = match_str.replace('2', '?').replace('3', '?')
+
         print 'Matching...',
         sys.stdout.flush()
         start = datetime.now()
 
         self._tmp_wordlist = WordList()
         self._dict = wordlist
-        self._match_help(match_str, '')
+        self._match_help(new_str, '')
 
         diff = datetime.now() - start
 
@@ -128,6 +130,22 @@ class Solver(object):
         # Don't hold on to the reference
         tmp = self._tmp_wordlist
         self._tmp_wordlist = None
-        return tmp
+
+        score_map = {}
+
+        for word in tmp:
+            score = 0
+            idx = 0
+            for let in word:
+                let_score = self.letter_mapping[let]
+                if match_str[idx] == '2':
+                    let_score *= 2
+                elif match_str[idx] == '3':
+                    let_score *= 3
+                score += let_score
+                idx += 1
+            score_map.setdefault(score, []).append(word)
+
+        return score_map
 
 
