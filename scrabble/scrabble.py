@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 import sys
 from datetime import datetime
@@ -20,10 +21,10 @@ class Solver(object):
                  dict_file=os.path.join(sys.prefix, 'dictionaries', 'ospd.dict')):
 
         self._full_dict = WordList()
-        print 'Loading legal word list...',
+        print('Loading legal word list...')
         sys.stdout.flush()
         self._full_dict.load_from_file(dict_file)
-        print 'Done!'
+        print('Done!')
 
         self._min_len = min_len
         self._tmp_wordlist = None
@@ -54,7 +55,7 @@ class Solver(object):
         if not isinstance(wordlist, WordList):
             wordlist = self._full_dict
 
-        print 'Solving...',
+        print('Solving...')
         sys.stdout.flush()
         start = datetime.now()
         # Create a new wordlist
@@ -64,12 +65,12 @@ class Solver(object):
         diff = datetime.now() - start
 
         num_words = len(self._tmp_wordlist)
-        print 'Done!'
-        print 'Found {0} word{1} in {2} seconds.'.format(
+        print('Done!')
+        print('Found {0} word{1} in {2} seconds.'.format(
             num_words,
             '' if num_words == 1 else 's',
             diff.microseconds * (10 ** -6)
-        )
+        ))
 
         # Don't hold on to the reference
         tmp = self._tmp_wordlist
@@ -109,7 +110,7 @@ class Solver(object):
 
         new_str = match_str.replace('2', '?').replace('3', '?')
 
-        print 'Matching...',
+        print('Matching...')
         sys.stdout.flush()
         start = datetime.now()
 
@@ -120,12 +121,12 @@ class Solver(object):
         diff = datetime.now() - start
 
         num_words = len(self._tmp_wordlist)
-        print 'Done!'
-        print 'Matched {0} word{1} in {2} seconds.'.format(
+        print('Done!')
+        print('Matched {0} word{1} in {2} seconds.'.format(
             num_words,
             '' if num_words == 1 else 's',
             diff.microseconds * (10 ** -6)
-        )
+        ))
 
         # Don't hold on to the reference
         tmp = self._tmp_wordlist
