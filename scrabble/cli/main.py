@@ -38,8 +38,10 @@ class ScrabbleApp(App):
         )
         self.solver = None
 
-    def out(self, msg='', color=Colors.DEFAULT_COLOR):
-        self.stdout.write(color + msg + Colors.ENDC + '\n')
+    def out(self, msg='', color=Colors.DEFAULT_COLOR, newline=True):
+        self.stdout.write(color + msg + Colors.ENDC)
+        if newline:
+            self.stdout.write('\n')
 
     def initialize_app(self, argv):
         self.solver = Solver(dict_file=os.path.join(sys.prefix, 'dictionaries', 'ospd.dict'))
